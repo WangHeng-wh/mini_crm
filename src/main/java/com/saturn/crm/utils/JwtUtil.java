@@ -1,6 +1,8 @@
 package com.saturn.crm.utils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -9,10 +11,13 @@ import java.util.Date;
  * Author: Saturn_Wh
  * Date: 2025/6/25 14:01
  */
+@Component
 public class JwtUtil {
 
+    @Value("${jwt.secret}")
     private String secret;
 
+    @Value("${jwt.expiration")
     private long expiration;
 
     //生成 JWT 令牌：根据用户名生成一个有效期为 2 小时的 JWT 令牌。
@@ -42,9 +47,22 @@ public class JwtUtil {
     }
     //    解析 JWT 令牌：从令牌中提取用户名。
     public String getUserNameFromToken(String token){
-        return null;
+        //创建一个令牌解析器，然后调用setSigningKey方法,设置解析器的解析签名密钥。
+        return Jwts.parser().setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
     //    验证令牌是否过期：检查令牌是否仍在有效期内。
+    public boolean isTokenExpired(String token){
+        //如果token的截止时间毫秒数比传入的时间（当前时间）小，则说明令牌过期了，返回true。
+        return getExpirationDateFromToken(token).before(new Date());
+    }
     //    获取令牌过期时间：从令牌中提取过期时间。
-
+    public Date getExpirationDateFromToken(String token){
+        return Jwts.parser().setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+    }
 }
