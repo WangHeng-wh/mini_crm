@@ -11,7 +11,11 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
-    "vue": "^3.5.17"
+    "axios": "^1.10.0",
+    "element-plus": "^2.10.2",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
